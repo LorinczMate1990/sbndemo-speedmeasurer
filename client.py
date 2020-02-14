@@ -18,4 +18,4 @@ while True:
         messageGot = False
         
     if messageGot:
-            print message
+            print(message)

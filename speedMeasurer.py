@@ -11,7 +11,7 @@ import time
 import zmq
 from scipy import optimize
 
-np.set_printoptions(threshold=np.nan) # If I print an array, I would like to see it...
+np.set_printoptions(2**31) # If I print an array, I would like to see it...
 
 def convertFromScreenToFloorCoordSystem(x, y, M):
     """ 
@@ -107,7 +107,7 @@ if __name__ == '__main__':
     if not useCamera:
         simulatorSocket = context.socket(zmq.PAIR)
         simulatorSocket.connect("tcp://localhost:%s" % simulatorPort)
-        print "speedMeasure?> Connected to simulator %s" % simulatorPort
+        print("speedMeasure?> Connected to simulator %s" % simulatorPort)
     else:
         cam = cv2.VideoCapture(0)
         cam.set(cv2.CAP_PROP_FPS, 15)
@@ -129,7 +129,7 @@ if __name__ == '__main__':
                 while not flag:
                     flag, frame = cam.read()
                     actCycleTimestamp = time.time()
-                    print "dTime", actCycleTimestamp-lastCycleTimestamp
+                    print("dTime", actCycleTimestamp-lastCycleTimestamp)
                     lastCycleTimestamp = actCycleTimestamp
                     if not flag:
                         pass
@@ -206,7 +206,7 @@ if __name__ == '__main__':
                 else:
                     circleBuffer = []
             else:
-                print "No aruco code found"
+                print("No aruco code found")
             
         if show == 0:
             cv2.imshow('Main', frame)
@@ -227,7 +227,7 @@ if __name__ == '__main__':
             calculateCircle = not calculateCircle
         elif pressedKey == ord('a'):
             refreshAruco = not refreshAruco
-            print "Aruco refresh ON" if refreshAruco else "Aruco refresh off"
+            print("Aruco refresh ON" if refreshAruco else "Aruco refresh off")
             
     # When everything done, release the capture
     cap.release()

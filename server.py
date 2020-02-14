@@ -24,7 +24,7 @@ def timedInput():
     global actSpeed
     signal.alarm(1) # Timeout másodpercben
     try:
-        foo = raw_input()
+        foo = input()
         actSpeed = int(foo)
     except InterrputException:
         #timeout
