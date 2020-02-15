@@ -91,6 +91,9 @@ refreshAruco = True
 
 if __name__ == '__main__':
     useCamera = "simulatorport" not in sys.argv
+    manualSpeed = "manualspeed" in sys.argv
+    manualSpeedValue = 0
+    corners = []
     if not useCamera:
         i = sys.argv.index('simulatorport')
         simulatorPort = sys.argv[i+1]
@@ -140,7 +143,7 @@ if __name__ == '__main__':
                 
             actTime = time.time()
             # Our operations on the frame come here
-            if refreshAruco:
+            if refreshAruco and not manualSpeed:
                 aruco_dict = aruco.Dictionary_get(aruco.DICT_6X6_250)
                 parameters =  aruco.DetectorParameters_create()
                 corners, ids, rejectedImgPoints = aruco.detectMarkers(frame, aruco_dict, parameters=parameters)
@@ -208,6 +211,10 @@ if __name__ == '__main__':
             else:
                 print("No aruco code found")
             
+        if manualSpeed:
+            data = {'distance':0,'dTime':0, 'speed':manualSpeedValue, 'x':0, 'y':0}
+            socket.send_pyobj(data)
+            
         if show == 0:
             cv2.imshow('Main', frame)
         elif show == 1:
@@ -228,6 +235,12 @@ if __name__ == '__main__':
         elif pressedKey == ord('a'):
             refreshAruco = not refreshAruco
             print("Aruco refresh ON" if refreshAruco else "Aruco refresh off")
+        elif pressedKey == ord('+'):
+            manualSpeedValue += 0.1
+            print("Manual speed:", manualSpeedValue)
+        elif pressedKey == ord('-'):
+            manualSpeedValue -= 0.1
+            print("Manual speed:", manualSpeedValue)
             
     # When everything done, release the capture
     cap.release()
